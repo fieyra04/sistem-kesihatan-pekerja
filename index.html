@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+<meta charset="UTF-8" />
+<title>Borang Pemeriksaan Harian</title>
+<style>
+  body { font-family: Arial, sans-serif; margin:20px; }
+  button { margin-right: 10px; }
+  nav { margin-bottom: 20px; }
+  nav a { text-decoration: none; color: blue; font-weight: bold; }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="rekod.html">Lihat Rekod Penilaian Kesihatan</a>
+</nav>
+
+<h2>Borang Pemeriksaan Harian Pekerja Telekomunikasi</h2>
+
+<form id="borangPemeriksaan">
+  <label>Nama Pekerja:<br>
+    <input type="text" name="nama" required style="width:100%;">
+  </label><br><br>
+
+  <label>ID Pekerja:<br>
+    <input type="text" name="id" required style="width:100%;">
+  </label><br><br>
+
+  <label>Jabatan:<br>
+    <input type="text" name="jabatan" style="width:100%;">
+  </label><br><br>
+
+  <label>No. Telefon:<br>
+    <input type="text" name="telefon" style="width:100%;">
+  </label><br><br>
+
+  <label>Tarikh Pemeriksaan:<br>
+    <input type="date" name="tarikh" required style="width:100%;">
+  </label><br><br>
+
+  <label>Lokasi Tugasan:<br>
+    <input type="text" name="lokasi" style="width:100%;">
+  </label><br><br>
+
+  <label>Suhu badan semasa (°C):<br>
+    <input type="number" step="0.1" name="suhu" required style="width:100%;">
+  </label><br><br>
+
+  <label>Gejala:<br>
+    <input type="checkbox" name="gejala" value="Batuk"> Batuk<br>
+    <input type="checkbox" name="gejala" value="Selsema"> Selsema<br>
+    <input type="checkbox" name="gejala" value="Sakit tekak"> Sakit tekak<br>
+    <input type="checkbox" name="gejala" value="Sesak nafas"> Sesak nafas<br>
+    <input type="checkbox" name="gejala" value="Demam"> Demam<br>
+    <input type="checkbox" name="gejala" value="Hilang deria bau/rasa"> Hilang deria bau/rasa<br>
+  </label><br>
+
+  <label>Penyakit kronik:<br>
+    <input type="radio" name="kronik" value="Ya" required> Ya<br>
+    <input type="radio" name="kronik" value="Tidak"> Tidak<br>
+    Jika Ya, nyatakan: <input type="text" name="penyakit" style="width:100%;">
+  </label><br><br>
+
+  <label>Hubungan dengan pesakit COVID-19 dalam 14 hari lepas:<br>
+    <input type="radio" name="covid" value="Ya" required> Ya<br>
+    <input type="radio" name="covid" value="Tidak"> Tidak<br>
+  </label><br>
+
+  <label>Keadaan kesihatan hari ini:<br>
+    <input type="radio" name="keadaan" value="Sangat Sihat" required> Sangat Sihat<br>
+    <input type="radio" name="keadaan" value="Sihat"> Sihat<br>
+    <input type="radio" name="keadaan" value="Kurang Sihat"> Kurang Sihat<br>
+    <input type="radio" name="keadaan" value="Tidak Sihat"> Tidak Sihat<br>
+  </label><br><br>
+
+  <button type="submit">Hantar</button>
+  <button type="reset">Reset</button>
+</form>
+
+<div id="msg" style="margin-top:15px; font-weight:bold; color:green;"></div>
+
+<script>
+  const form = document.getElementById('borangPemeriksaan');
+  const msg = document.getElementById('msg');
+
+  form.addEventListener('submit', e => {
+    e.preventDefault();
+
+    const data = new FormData(form);
+    const nama = data.get('nama');
+    const id = data.get('id');
+    const jabatan = data.get('jabatan');
+    const telefon = data.get('telefon');
+    const tarikh = data.get('tarikh');
+    const lokasi = data.get('lokasi');
+    const suhu = data.get('suhu');
+    const gejala = data.getAll('gejala');
+    const kronik = data.get('kronik');
+    const penyakit = data.get('penyakit');
+    const covid = data.get('covid');
+    const keadaan = data.get('keadaan');
+
+    let rekodData = JSON.parse(localStorage.getItem('rekodKesihatan')) || [];
+
+    rekodData.push({
+      nama, id, jabatan, telefon, tarikh, lokasi,
+      suhu, gejala, kronik, penyakit, covid, keadaan
+    });
+
+    localStorage.setItem('rekodKesihatan', JSON.stringify(rekodData));
+
+    msg.textContent = 'Rekod berjaya dihantar!';
+    form.reset();
+  });
+</script>
+
+</body>
+</html>
